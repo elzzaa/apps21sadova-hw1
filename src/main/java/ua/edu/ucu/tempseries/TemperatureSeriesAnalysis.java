@@ -1,11 +1,12 @@
 package ua.edu.ucu.tempseries;
 
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
     private double[] temperatureSeries;
     private int size = 0;
+    public static final int MAX_NUM=273;
+    public static final int MIN_NUM=-273;
 
     public TemperatureSeriesAnalysis() {
         temperatureSeries = new double[]{};
@@ -34,19 +35,19 @@ public class TemperatureSeriesAnalysis {
 
     public double deviation() {
         double average = this.average();
-        double sum = 0;
+        double sumTemp = 0;
         for (double temp: temperatureSeries) {
-            sum += Math.pow(temp-average, 2);
+            sumTemp += Math.pow(temp-average, 2);
         }
-        return sum/Math.sqrt(size);
+        return sumTemp/Math.sqrt(size);
     }
 
     public double min() {
-        return findTempClosestToValue(-1000000);
+        return findTempClosestToValue(MIN_NUM);
     }
 
     public double max() {
-        return findTempClosestToValue(1000000);
+        return findTempClosestToValue(MAX_NUM);
     }
 
     public double findTempClosestToZero() {
@@ -69,14 +70,16 @@ public class TemperatureSeriesAnalysis {
     public double[] findTempsLessThen(double tempValue) {
         int counter = 0;
         for (double temp: temperatureSeries) {
-            if (temp < tempValue) { counter ++;}
+            if (temp < tempValue) {
+                counter++;
+            }
         }
         double[] res = new double[counter];
         int i = 0, j = 0;
         while (i < size) {
             if (temperatureSeries[i] < tempValue) {
                 res[j] = temperatureSeries[i];
-                j ++;
+                j++;
             }
             i++;
         }
@@ -86,14 +89,16 @@ public class TemperatureSeriesAnalysis {
     public double[] findTempsGreaterThen(double tempValue) {
         int counter = 0;
         for (double temp: temperatureSeries) {
-            if (temp > tempValue) { counter ++;}
+            if (temp > tempValue) {
+                counter ++;
+            }
         }
         double[] res = new double[counter];
         int i = 0, j = 0;
         while (i < size) {
             if (temperatureSeries[i] > tempValue) {
                 res[j] = temperatureSeries[i];
-                j ++;
+                j++;
             }
             i++;
         }
@@ -112,12 +117,12 @@ public class TemperatureSeriesAnalysis {
     public int addTemps(double... temps) {
         check();
         for (double temp: temps) {
-            if (temp < 273) {
+            if (temp < MIN_NUM) {
                 throw new InputMismatchException();
             }
         }
         int sum = 0;
-        int sizeAdd = (int) size;
+        int sizeAdd = size;
         while (temps.length + size > sizeAdd) {
             sizeAdd *= 2;
         }
